@@ -1,15 +1,32 @@
 import * as express from "express";
+import { Cat, CatType } from "./app.model";
+
 const app: express.Express = express();
-const port: number = 8000
+const port: number = 8000;
 
+//express.middleware
+app.use((req, res, next) => {
+    console.log(req.rawHeaders[1]);
+    console.log('This is logging middleware');
+    next();
+});
 
-const data = [1, 2, 3, 4];
+//express.Router
+app.get('/cats/blue', (req: express.Request, res: express.Response) => {
+    res.send({ cats: Cat[0] });
+});
 
-app.get('/test', (req: express.Request, res: express.Response) => {
-    console.log(req);
-    res.send({ data });
-})
+//express.Router
+app.get('/cats/som', (req: express.Request, res: express.Response) => {
+    res.send({ cats: Cat[1] });
+});
+
+//express.middleware
+app.use((req, res, next) => {
+    console.log('This is error middleware');
+    res.send({ error: 'This is error' });
+});
 
 app.listen(port, () => {
-    console.log(`Example app listen at http://localhost:${port}`)
+    console.log(`Example app listen at http://localhost:${port}`);
 })
